@@ -126,26 +126,6 @@ gulp.task("server", function() {
 
 });
 
-// Generate staff email content
-gulp.task("publish", function() {
-
-  fs.readFile("internal/staff-email.template","utf8",function(err,email){
-
-    var content = getContent();
-
-    if (err) {
-      // Email template file not found
-      return console.log("No publish template found.");
-    }
-
-    // Log the templated output
-    // Get rid of unnecessary newlines: no more than two in a row
-    console.log(entities.decode(lodash(email,content).replace(/\n\n\n*/g,"\n\n").trim()));
-
-  });
-
-});
-
 // Default task is a basic build
 gulp.task("default",["js","css","misc","html"]);
 
