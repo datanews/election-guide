@@ -1,4 +1,4 @@
-# Project name
+# Election Guide / Judge Your Judges
 
 This is an edited version of the data and code that drove the [New York Voter Guide](https://project.wnyc.org/election-guide-2016-state/search.html), from [WNYC](https://wnyc.org) and [Gotham Gazette](http://www.gothamgazette.com/), for the New York State primary election in September 2016.
 
