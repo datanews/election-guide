@@ -1,0 +1,165 @@
+#!/usr/bin/env node
+
+var child_process = require("child_process"),
+    topojson = require("topojson"),
+    fs = require("fs"),
+    _ = require("underscore"),
+    csvParse = require("d3-dsv").csvParse,
+    queue = require("d3-queue").queue;
+
+var types = {
+  "nyad": "assembly",
+  "nybb": "borough",
+  "nycc": "council",
+  "nymc": "court",
+  "nyss": "senate"
+};
+
+var q = queue(1);
+
+q.defer(exec, "mkdir -p working geojson");
+q.defer(exec, "rm geojson/*.geo.json || echo 'Skip'");
+
+var keys = _.keys(types);
+
+keys.forEach(function(key){
+  q.defer(convert, key);
+});
+
+q.awaitAll(function(err, layers){
+  if (err) {
+    throw err;
+  }
+
+  var objects = {};
+
+  layers.slice(2).forEach(function(geo, i){
+    objects[types[keys[i]]] = geo;
+  });
+
+  pruneFeatures(objects);
+
+});
+
+function pruneFeatures(layers) {
+
+  var contested = [];
+
+  _.values(types).forEach(function(val){
+    contested[val] = [];
+  });
+
+  queue()
+    .defer(readCSV, "../candidates.csv")
+    .await(function(err, candidates){
+
+      candidates.forEach(function(row){
+
+          if (row.ot_name === "Manhattan Civil Court") {
+            contested.court.push({ type: "court", borough: "Manhattan", district: +row.se_number });
+          } else if (row.ot_name === "State Senate") {
+          } else if (row.ot_name === "State Assembly") {
+          } else if (row.ot_name === "City Council") {
+            contested.council.push({ type: "council", district: +row.se_number });
+          } else if (row.ot_name === "Brooklyn Civil Court") {
+            if (row.se_name !== "Countywide") {
+              contested.court.push({ type: "court", borough: "Brooklyn", district: +row.se_number });
+            }
+          } else {
+            console.warn(row);
+          }
+
+      });
+
+      console.log(contested);
+
+      _.pairs(layers).forEach(function(pair){
+
+          if (pair[0] === "borough" || pair[0] === "assembly" || pair[0] === "senate") {
+            return true;
+          }
+
+          pair[1].features = pair[1].features.filter(function(feature){
+
+            var matches = !!contested[pair[0]].filter(function(race){
+              return race.district === feature.properties.district &&
+              (!feature.properties.borough || feature.properties.borough === race.borough);
+            }).length;
+
+            if (matches) {
+              console.log(pair[0], feature.properties, "contested");
+              return true;
+            } else {
+              console.log(pair[0], feature.properties, "uncontested");
+              return false;
+            }
+
+          });
+
+        });
+
+      var topology = topojson.topology(layers, {
+        "quantization": 1e6,
+        "verbose": true,
+        "property-transform": function(feature) {
+          return feature.properties;
+        }
+      });
+
+      fs.writeFile("districts.topo.json", JSON.stringify(topology));
+
+    });
+
+}
+
+function readCSV(filename, cb) {
+  fs.readFile(filename, "utf8", function(err, raw){
+    return cb(err, err ? null : csvParse(raw));
+  });
+}
+
+function convert(key, cb) {
+
+  queue(1)
+    .defer(exec, "unzip -o -d working/ " + key + "_16c.zip")
+    .defer(exec, "ogr2ogr -f 'GeoJSON' -t_srs 'EPSG:4326' geojson/" + key + ".geo.json working/" + key + "_16c/" + key + ".shp")
+    .defer(fs.readFile, "geojson/" + key + ".geo.json", "utf8")
+    .await(function(err, a, b, raw){
+      if (err) {
+        return cb(err);
+      }
+
+      var parsed = JSON.parse(raw);
+
+      parsed.features.forEach(function(feature){
+
+        var props = {},
+            district = (feature.properties.MuniCourt || feature.properties.StSenDist || feature.properties.AssemDist || feature.properties.CounDist);
+
+        if (district) {
+          props.district = +district;
+        }
+
+        if (feature.properties.BoroName) {
+          props.borough = feature.properties.BoroName;
+        }
+
+        console.log(props);
+
+        feature.properties = props;
+
+      });
+
+      fs.writeFileSync("geojson/" + key + ".geo.json", JSON.stringify(parsed));
+
+      return cb(null, parsed);
+
+    });
+}
+
+function exec(cmd, cb) {
+  console.warn(cmd);
+  child_process.exec(cmd, function(err, stdout, stderr){
+    cb(err, stdout);
+  });
+}

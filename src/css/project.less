@@ -1,0 +1,528 @@
+@D: #2f9ad0;
+@R: #dd1c77;
+
+#container {
+    max-width: 900px;
+    margin: 0 auto;
+    position: relative;
+    padding-top: 2em;
+
+    &.short {
+      padding-top: 0.5em;
+    }
+}
+
+#map {
+  max-width: 540px;
+  margin: 1em auto;
+  height: 144px;
+}
+
+#subtitle{
+  text-align: center;
+  margin: 0;
+}
+
+.banner {
+  background-image: url('../img/NYSupremeCourt.png');
+  height: 453px;
+  background-position: center center;
+  background-size: cover;
+  position: relative;
+}
+
+.logo-box {
+  text-align: left;
+}
+
+.search-candidates {
+  padding-top: 90px;
+}
+
+.form-row {
+  text-align: center;
+  margin: 0.5em;
+}
+
+.key-races-row {
+  text-align: center;
+  margin: 0 0.5em;
+  position: relative;
+  bottom: 0.6em;
+}
+
+.pick-party {
+  text-align: center;
+  color: #333;
+}
+
+button {
+  color: #fff;
+  padding: 0.5em 0;
+  display: inline-block;
+  margin: 0px;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+  border: none;
+  border-radius: 25px;
+  width: 72px;
+  font-size: 12px;
+  opacity: 1;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: 600;
+
+}
+
+button.D:hover,
+button.on {
+  background-color: #97cde7;
+}
+
+button.R:hover,
+button.on {
+  background-color: #ee77af;
+}
+
+button.key-races:hover,
+button.on {
+  opacity: .5;
+}
+
+
+button.R {
+  background-color: @R;
+}
+
+button.D {
+  background-color: @D;
+}
+
+button.key-races {
+  background-color: #6accc4;
+  color: #fff;
+  width: 177px;
+  font-size: 16px;
+  margin-top: .75em;
+}
+
+// text input styling
+input.address {
+  padding: 12px;
+  border: 1px solid #bbb;
+  width: 312px;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.slates {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+.bracket {
+  width: 12px;
+  height: 10px;
+  border-left: 1px solid #333;
+}
+
+.bracket-top {
+  border-top: 1px solid #333;
+}
+
+.bracket-bottom {
+
+  border-bottom: 1px solid #333;
+}
+
+.slate-explanation {
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+
+.slate-description {
+  margin-top: 1em;
+  font-style: italic;
+}
+
+.race-slate {
+  background-color: #efefef;
+}
+
+.slate {
+  float: left;
+  text-align: center;
+}
+
+.slate-inner {
+  background-color: #fff;
+  width: 80%;
+  display: inline-block;
+  padding: 1em;
+  text-align: left;
+}
+
+.col-2 {
+  width: 100% / 2;
+}
+
+.col-3 {
+  width: 100% / 3;
+}
+
+.col-4 {
+  width: 100% / 4;
+}
+
+.delegates {
+  border-left: 1px solid #333;
+  padding: 0 0.5em;
+}
+
+#race-type {
+  background-color: #333;
+  color: #fff;
+  padding: .5em;
+  margin: 10px 0;
+  text-transform: uppercase;
+  font-size: 12px;
+  padding-left: .7em;
+}
+
+.civil-court{
+  background-color: #999;
+}
+
+.party-text {
+  margin: 0 8px;
+  color: #333;
+}
+
+.key-races-head{
+  text-align: center;
+  color: #333;
+  margin-top: 56px;
+}
+
+a:link {
+  color: #128cf4;
+}
+
+h1 {
+  font-size: 2em;
+  font-weight: 800;
+  margin: 0;
+  padding-bottom: 2em;
+  text-align: center;
+}
+
+.candidate {
+  margin-bottom: 10px;
+}
+
+.candidate-top {
+  cursor: pointer;
+  height: 88px;
+  padding-left: 96px;
+  font-size: 1.5em;
+  position: relative;
+  background-position: 12px center;
+  background-size: 70px 70px;
+  background-repeat: no-repeat;
+  background-color: #efefef;
+  color: #333;
+}
+
+.candidate-name {
+  position: absolute;
+  padding-right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.incumbent {
+  top: 1.5em;
+  background-color: #fc0;
+  font-size: 10px;
+  padding: 0.2em 0.5em;
+  position: absolute;
+  margin-top: 22px;
+}
+
+.candidate-details {
+  display: none;
+  background-color: #fff;
+  border: 4px solid #efefef;
+  padding: 14px;
+  font-size: 14px;
+  color: #333;
+  line-height: 30px;
+}
+
+.candidate.open .candidate-details {
+  display: block;
+}
+
+.toggle {
+    display: block;
+    position: absolute;
+    right: 6px;
+    bottom: 10px;
+    width: 36px;
+    height: 36px;
+  }
+
+  .toggle div {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 14px 9px;
+    width: 36px;
+    height: 10px;
+  }
+
+  .expand {
+    background-image: url('../img/down-arrow.png');
+  }
+
+  .close {
+    background-image: url('../img/up-arrow.png');
+    display: none;
+  }
+
+.open {
+    .expand {
+      display: none;
+    }
+
+    .close {
+      display: block;
+    }
+  }
+
+.error {
+  text-align: center;
+  color:#e3183f;
+  font-weight: 600;
+}
+
+.race-header {
+  background-color: #000;
+  color: #fff;
+  text-transform: uppercase;
+  padding: 0.75em 12px;
+  margin-bottom: 10px;
+}
+
+.party-R .race-header {
+  background-color: @R;
+}
+
+.party-D .race-header {
+  background-color: @D;
+}
+
+.no-margin .race-header {
+  margin-bottom: 0;
+}
+
+.why-watch,
+.race-none {
+  padding: 12px;
+  margin-bottom: 10px;
+  background-color: #efefef;
+}
+
+.why-watch {
+  font-weight: 600;
+  p {
+    margin: 12px 0;
+  }
+}
+
+.race,
+.placeholder {
+  margin-bottom: 30px;
+}
+
+#loading {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 99999;
+}
+
+#loading .table {
+  display: table;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+}
+
+#loading .cell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding: 20px;
+}
+
+@media screen and (max-width: 900px) {
+  .slate.col-3,
+  .slate.col-4 {
+    width: 100%;
+    float: none;
+    margin-bottom: 12px;
+    background-color: #fff;
+
+    .slate-inner {
+      width: 75%;
+    }
+
+  }
+  .logo-box{
+    text-align: center;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .slate.col-2 {
+    width: 100%;
+    float: none;
+    margin-bottom: 12px;
+    background-color: #fff;
+
+    .slate-inner {
+      width: 75%;
+    }
+  }
+  .search-candidates {
+   padding-top: 90px;
+  }
+}
+
+
+@media screen and (max-width: 590px) {
+
+  h1 {
+    font-size: 1.5em;
+    font-weight: 800;
+    margin: 0;
+    padding-bottom: 2.75em;
+    text-align: center;
+  }
+
+  .search-candidates {
+   padding-top: 98px;
+  }
+
+}
+
+@media screen and (max-width: 420px) {
+  .toggle {
+    bottom: 27px;
+  }
+
+  .candidate-top {
+    height: 120px;
+  }
+
+  .incumbent {
+    top: auto;
+    bottom: -2.2em;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .slate.col-2,
+  .slate.col-3,
+  .slate.col-4 {
+
+    .slate-inner {
+      width: 90%;
+    }
+
+  }
+}
+
+@media screen and (max-width: 350px) {
+  input.address {
+    width: 280px;
+  }
+}
+
+@media screen and (max-width: 470px) {
+  .candidate-top {
+    font-size: 1.25em;
+  }
+}
+
+@-webkit-keyframes shake {
+  from, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -moz-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    -moz-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+@-moz-keyframes shake {
+  from, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -moz-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    -moz-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+@keyframes shake {
+  from, to {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+
+  10%, 30%, 50%, 70%, 90% {
+    -webkit-transform: translate3d(-10px, 0, 0);
+    -moz-transform: translate3d(-10px, 0, 0);
+    transform: translate3d(-10px, 0, 0);
+  }
+
+  20%, 40%, 60%, 80% {
+    -webkit-transform: translate3d(10px, 0, 0);
+    -moz-transform: translate3d(10px, 0, 0);
+    transform: translate3d(10px, 0, 0);
+  }
+}
+
+.shake {
+  -webkit-animation: shake 0.5s;
+  -moz-animation: shake 0.5s;
+  animation: shake 0.5s;
+}

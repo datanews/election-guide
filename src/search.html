@@ -1,0 +1,47 @@
+<div id="container" class="short">
+  <div id="header">
+    <div class="banner">
+        <div class="logo-box">
+          <img src="img/wnyc-logo.png" alt="WNYC" class="wnyc-logo"><img src="img/gg_logo.png" alt="Gotham Gazette" class="gg-logo">
+        </div>
+        <div class="search-candidates">
+          <form method="GET" action="/election-guide-2016-state/" target="_blank">
+            <input type="hidden" name="party" class="input-party" value="" />
+            <div id="title"><h1>Who's On My Ballot?</h1></div>
+            <div id="subtitle"><strong>Races in your district</strong></div>
+            <div class="error"></div>
+            <div class="form-row">
+              <input type="text" placeholder="Enter your address (e.g. street, zip)" name="address" class="address" maxlength="255">
+            </div>
+            <div class="pick-party">Pick a party:
+            </div>
+            <div class="form-row">
+              <div style="display: none;"><button></button></div>
+              <button class="party D" data-party="D">DEM</button><span class="party-text">or</span><button class="party R" data-party="R">REP</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="clear" id="dummy"></div>
+  </div>
+</div><!-- #container -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<!-- Pym.js -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/pym/0.4.3/pym.min.js"></script>
+
+<script type="text/javascript">
+  var pymChild;
+
+  if (typeof pym !== undefined) {
+
+    pymChild = new pym.Child({ polling: 500 });
+    $("body").addClass("pym");
+
+  }
+</script>
+
+<!-- Script for this project -->
+<script src="js/search.js"></script>

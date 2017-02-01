@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Test Pym Embed</title>
+
+    <style>
+      body {
+        background-color: #BDBDBD;
+      }
+
+      .wrapper {
+        margin: 2em 2em 6em 2em;
+      }
+    </style>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pym/0.4.3/pym.min.js"></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1>?wnyc=true</h1>
+
+      <div id="pym-embed-1"></div>
+      <script type="text/javascript" data-id="pym-embed-1" data-url="../output/" src="http://project.wnyc.org/assets/js/wnyc-resize-embed.v1.js"></script>
+    </div>
+    <div class="wrapper">
+      <h1>?pym=true</h1>
+
+      <div id="pym-embed-2"></div>
+      <script type="text/javascript">
+        (function(){
+          var pymParent = new pym.Parent(
+            "pym-embed-2",
+            "../output/?pym=true",
+            {}
+          );
+        })();
+      </script>
+    </div>
+    <div class="wrapper">
+      <h1>?embed=true</h1>
+      <iframe src="../output/" width="100%" height="400" scrolling="no" frameborder="0"></iframe>
+    </div>
+  </body>
+</html>

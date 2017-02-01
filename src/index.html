@@ -1,0 +1,154 @@
+<div id="container">
+  <div id="loading">
+    <div class="table">
+      <div class="cell">LOADING...</div>
+    </div>
+  </div>
+  <div id="header">
+    <div class="banner">
+        <div class="logo-box">
+           <img src="img/wnyc-logo.png" alt="wnyc" class="wnyc-logo" /><img src="img/gg_logo.png" alt="gotham gazette" class="gg-logo" />
+        </div>
+        <div class="search-candidates">
+          <form>
+            <div id="title"><h1>Your Guide to Your Ballot</h1></div>
+            <div class="error"></div>
+            <div class="form-row">
+              <input type="text" placeholder="Enter your address (e.g. street, zip)" name="address" class="address" maxlength="255">
+            </div>
+            <div class="pick-party">Pick a party:
+            </div>
+            <div class="form-row">
+              <div style="display: none;"><button></button></div>
+              <button class="party D" data-party="D">DEM</button><span class="party-text">or</span><button class="party R" data-party="R">REP</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="key-races-row">
+        <div class="pick-party">Just show me:</div>
+        <button class="key-races">Races to watch</button>
+      </div>
+      <div class="clear"></div>
+  </div>
+  <div id="results" class="hidden">
+    <div id="map"></div>
+    <div id="races">
+      <% races.forEach(function(race){
+        var extra = "";
+        if (race.why_watch) {
+          extra = " watch no-margin";
+        } else if (race.gg_link) {
+          extra = " no-margin";
+        }
+      %>
+        <div class="race hidden party-<%=race.party%> race-<%=race.officeType%><%=extra%>" data-district="<%=race.seatNumber%>" data-party="<%=race.party%>" data-type="<%=race.officeType%>" data-borough="<%=race.borough%>">
+          <div class="race-header"><%=race.officeName%> RACE</div>
+          <% if (extra) { %>
+            <div class="why-watch">
+              <% if (race.why_watch) { %><%=race.why_watch%><% } %>
+              <% if (race.why_watch && race.gg_link) { %><br/><br/><% } %>
+              <% if (race.gg_link) { %><a href="<%=race.gg_link%>" rel="noopener" target="_blank">More from Gotham Gazette</a><% } %>
+            </div>
+
+          <% } %>
+          <% if (race.slates) { %>
+            <div class="slate-explanation">
+              You will see these "slates" or groups of names, they are delegates that will elect your judges above the civil court level. You can pick <%=race.numDelegates%> and can mix/match from different groups:
+            </div>
+            <div class="slates">
+              <% (race.slates || []).forEach(function(slate){ %>
+                <div class="slate col-<%=race.slates.length%>"">
+                  <div class="slate-inner">
+                    <div class="bracket bracket-top"></div><div class="delegates"><% print(slate.delegates.join("<br/>")); %></div><div class="bracket bracket-bottom"></div>
+                    <% if (slate.description) { %>
+                      <div class="slate-description"><%=slate.description%></div>
+                    <% } %>
+                  </div>
+                </div>
+              <% }); %>
+              <div class="clear"></div>
+            </div>
+          <% } %>
+          <% (race.candidates || []).forEach(function(candidate){
+            candidate.filename = (candidate.first + "_" + candidate.last).toLowerCase().replace(/[^a-z_-]/g,"") + ".png";
+          %>
+            <div class="candidate">
+              <div class="candidate-top" style="background-image:url('img/<%=candidate.filename%>');">
+                <div class="candidate-name">
+                  <% if (candidate.incumbent) { %>
+                    <span class="incumbent">INCUMBENT</span>
+                  <% } %>
+                  <%=candidate.name%>
+                </div>
+                <div class="toggle">
+                  <div class="expand"></div>
+                  <div class="close"></div>
+                </div>
+              </div>
+              <div class="candidate-details">
+                <% if (candidate.sentence) { %>
+                  <strong>About this candidate:</strong>
+                  <%=candidate.sentence%><br>
+                <% } %>
+                <% if (candidate.currently) { %>
+                  <strong>Currently:</strong>
+                  <%=candidate.currently%><br>
+                <% } %>
+                <% if (candidate.previously) { %>
+                  <strong>Previously:</strong>
+                  <%=candidate.previously%><br>
+                <% } %>
+                <% if (candidate.website || candidate.twitter || candidate.facebook) { %>
+                  <strong>More on this candidate:</strong>
+                  <%
+                    print(["website", "twitter", "facebook"].filter(function(d){
+                      return candidate[d];
+                    }).map(function(d){
+                      return '<a href="' + candidate[d] + '" rel="noopener" target="_blank">' + d[0].toUpperCase() + d.slice(1) + '</a>';
+                    }).join(", "));
+                  %>
+                <% } %>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% }); %>
+        <div class="placeholder no-margin hidden" id="placeholder-assembly">
+          <div class="race-header"></div>
+          <div class="race-none"></div>
+        </div>
+        <div class="placeholder no-margin hidden" id="placeholder-senate">
+          <div class="race-header"></div>
+          <div class="race-none"></div>
+        </div>
+    </div>
+  </div>
+</div><!-- #container -->
+
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.min.js"></script>
+
+<!-- Pym.js -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/pym/0.4.3/pym.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYhgAzDJUNjrfqxgOaVL6ENQoJSRKN9tE"></script>
+
+<script type="text/javascript">
+  var pymChild;
+
+  if (typeof pym !== undefined) {
+
+    pymChild = new pym.Child({ polling: 500 });
+    $("body").addClass("pym");
+
+  }
+</script>
+
+<script src="js/libs/wherewolf.js"></script>
+<script src="js/libs/URI.min.js"></script>
+
+<!-- Script for this project -->
+<script src="js/project.js"></script>
